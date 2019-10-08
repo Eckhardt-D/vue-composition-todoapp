@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1 class="title">My todo list</h1>
+    <app-item-input @addItem="addItem" />
+    <app-list @removeItem="removeItem" :items="state.items" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { reactive } from "@vue/composition-api";
+import AppList from "@/components/AppList.vue";
+import AppItemInput from "@/components/AppItemInput.vue";
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  name: "app",
+  components: { AppList, AppItemInput },
+  setup() {
+    const state = reactive({
+      items: []
+    });
+
+    const addItem = $event => state.items.unshift($event);
+    const removeItem = $event => state.items.splice($event, 1);
+
+    return {
+      state,
+      addItem,
+      removeItem
+    };
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  max-width: 400px;
+  margin: 0 auto;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.title {
+  text-align: center;
 }
 </style>
